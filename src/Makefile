@@ -31,7 +31,7 @@ include kaldi.mk
 
 # Reset the default goal, so that the all target will become default
 .DEFAULT_GOAL :=
-all: $(SUBDIRS) matrix/test
+all: $(SUBDIRS)
 	-echo Done
 
 mklibdir:
@@ -101,16 +101,6 @@ clean: rmlibdir
 
 distclean: clean
 	-for x in $(SUBDIRS) $(EXT_SUBDIRS); do $(MAKE) -C $$x distclean; done
-
-test: $(addsuffix /test, $(SUBDIRS_LIB))
-
-ext_test: $(addsuffix /test, $(EXT_SUBDIRS_LIB))
-
-# Define an implicit rule, expands to e.g.:
-#  base/test: base
-#     $(MAKE) -C base test
-%/test: % mklibdir
-	$(MAKE) -C $< test
 
 cudavalgrind:
 	-for x in $(CUDAMEMTESTDIR); do $(MAKE) -C $$x valgrind || { echo "valgrind on $$x failed"; exit 1; }; done
